@@ -20,6 +20,8 @@ class HomeTableViewController: UITableViewController {
         TwitterAPICaller.client?.logout()
         // this dismisses the Home screen after clicking logout
         self.dismiss(animated: true, completion: nil)
+        // This sets the user is logged out - sets it to false
+        UserDefaults.standard.set(false, forKey: "userLoggedIn")
     }
     // MARK: - Table view data source
 
