@@ -15,16 +15,23 @@ class HomeTableViewController: UITableViewController {
     // Number of Tweets
     var numOfTweet: Int!
     
+    // Refresh control to give user ability to refresh tweets
+    let myRefreshControl = UIRefreshControl()
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
         //This will load the tweets being called
         loadTweet()
+        
+        myRefreshControl.addTarget(self, action: #selector(loadTweet), for: .valueChanged)
+        // telling the table which fresh control to use
+        tableView.refreshControl = myRefreshControl
 
     }
     
-    // Pulling (get) our tweets (calls our API)
-    func loadTweet(){
+    // Pulling (getting) our tweets (calls our API)
+    @objc func loadTweet(){
         
         let myURL = "https://api.twitter.com/1.1/statuses/home_timeline.json"
         
@@ -42,13 +49,20 @@ class HomeTableViewController: UITableViewController {
                 // Adding tweets
                 self.tweetArray.append(tweet)
             }
-            // Makes sure we repopulate our list anytime we make a call to the API
+            // Makes sure we repopulate our list anytime we make a call to the API (updates the table)
             self.tableView.reloadData()
+            
+            // Makes sure we stop the update after user refresh
+            self.myRefreshControl.endRefreshing()
             
         }, failure: { Error in
             print("Could not retreive tweets! Oh no!!")
         })
     }
+    
+    // Load more tweets infinitely
+    
+   // func loadMoreTweets
     
     
 
