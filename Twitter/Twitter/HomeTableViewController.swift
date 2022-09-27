@@ -51,7 +51,7 @@ class HomeTableViewController: UITableViewController {
                 // Adding tweets
                 self.tweetArray.append(tweet)
             }
-            // Makes sure we repopulate our list anytime we make a call to the API (updates the table)
+            // Makes sure we re-populate our list anytime we make a call to the API (updates the table)
             self.tableView.reloadData()
             
             // Makes sure we stop the update after user refresh
