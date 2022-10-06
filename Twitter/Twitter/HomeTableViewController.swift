@@ -21,13 +21,21 @@ class HomeTableViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        //This will load the tweets being called
-        loadTweets()
         
         myRefreshControl.addTarget(self, action: #selector(loadTweets), for: .valueChanged)
         // telling the table which fresh control to use
         tableView.refreshControl = myRefreshControl
-
+        // this will let the tweet grow as needed
+        self.tableView.rowHeight = UITableView.automaticDimension
+        self.tableView.estimatedRowHeight = 125 // the video used 150, but it looked to spread out
+    }
+    
+    // Reloads Tweet after calling post tweet
+    override func viewDidAppear(_ animated: Bool) {
+        
+        super.viewDidAppear(animated)
+        loadTweets() // moved from vidwDidLoad func
+        
     }
     
     // Pulling (getting) our tweets (calls our API)
@@ -109,7 +117,7 @@ class HomeTableViewController: UITableViewController {
         // This sets the user is logged out - sets it to false
         UserDefaults.standard.set(false, forKey: "userLoggedIn")
     }
-    // Displays the pulled tweets
+    // Displays the pulled tweets // I can add the time here
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "tweetCell", for: indexPath) as! TweetCellTableViewCell
@@ -132,6 +140,10 @@ class HomeTableViewController: UITableViewController {
             cell.profileImageView.image = UIImage(data: imageData)
         }
         
+        // determines if user favorited or not favorited
+        cell.setFavorite(tweetArray[indexPath.row]["favorited"] as! Bool) // method
+        cell.tweetID = tweetArray[indexPath.row]["id"] as! Int
+        cell.setRetweeted(tweetArray[indexPath.row]["retweeted"] as! Bool) // method
         
         return cell
     }

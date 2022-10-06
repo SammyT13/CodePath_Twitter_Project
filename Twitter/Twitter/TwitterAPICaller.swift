@@ -64,4 +64,56 @@ class TwitterAPICaller: BDBOAuth1SessionManager {
         })
     }
     
+    // This is our call to post Tweets
+    func postTweet(tweetString: String, success: @escaping () -> (), failure: @escaping (Error) -> ()){
+        // URL from Twitter API - Post Tweet
+        let URL = "https://api.twitter.com/1.1/statuses/update.json"
+        
+        TwitterAPICaller.client?.post(URL, parameters: ["status": tweetString], progress: nil, success: { (task: URLSessionDataTask, response: Any?) in
+            success()
+        }, failure: { (task: URLSessionDataTask?, error: Error) in
+            failure(error)
+        })
+        
+    }
+    
+    // Creates a favorite
+    func favoriteTwee(tweetID: Int, success: @escaping () -> (), failure: @escaping (Error) -> ()) {
+        
+        // URL from Twitter API - create favorite
+        let URL = "https://api.twitter.com/1.1/favorites/create.json"
+        
+        TwitterAPICaller.client?.post(URL, parameters: ["id": tweetID], progress: nil, success: { (task: URLSessionDataTask, response: Any?) in
+            success()
+        }, failure: { (task: URLSessionDataTask?, error: Error) in
+            failure(error)
+        })
+    }
+    
+    // Destroys a favorite (un-favorite)
+    func unfavoriteTwee(tweetID: Int, success: @escaping () -> (), failure: @escaping (Error) -> ()) {
+        
+        // URL from Twitter API - destroy favorite
+        let URL = "https://api.twitter.com/1.1/favorites/destroy.json"
+        
+        TwitterAPICaller.client?.post(URL, parameters: ["id": tweetID], progress: nil, success: { (task: URLSessionDataTask, response: Any?) in
+            success()
+        }, failure: { (task: URLSessionDataTask?, error: Error) in
+            failure(error)
+        })
+    }
+    
+    // Retweet tweets
+    func retweet(tweetID: Int, success: @escaping () -> (), failure: @escaping (Error) -> ()) {
+        // remember we have to pass the 'id'
+        let URL = "https://api.twitter.com/1.1/statuses/retweet/\(tweetID).json"
+        
+        TwitterAPICaller.client?.post(URL, parameters: ["id": tweetID], progress: nil, success: { (task: URLSessionDataTask, response: Any?) in
+            success()
+        }, failure: { (task: URLSessionDataTask?, error: Error) in
+            failure(error)
+        })
+
+    }
+    
 }
